@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You | Director Options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- ============================================================
+       META PIXEL — Monirul: replace XXXXXXXXXXXXXXXX with Pixel ID
+       Lead + PageView fire on load of this page
+       ============================================================ -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'XXXXXXXXXXXXXXXX'); // REPLACE WITH PIXEL ID
+  fbq('track', 'PageView');
+  fbq('track', 'Lead');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=XXXXXXXXXXXXXXXX&ev=Lead&noscript=1"/></noscript>
+  <!-- END META PIXEL -->
+
+  <!-- ============================================================
+       GOOGLE ADS CONVERSION TAG
+       Monirul: replace AW-XXXXXXXXX and CONVERSION_LABEL
+       ============================================================ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-XXXXXXXXX');
+    gtag('event', 'conversion', {'send_to': 'AW-XXXXXXXXX/CONVERSION_LABEL'});
+  </script>
+  <!-- END GOOGLE ADS CONVERSION TAG -->
+
+  <!-- GA4: no tag needed here if GTM container is live on the domain -->
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1a3a5c;
+      --navy-dark: #0f2540;
+      --teal: #2a9d5c;
+      --white: #ffffff;
+      --off-white: #f5f8fc;
+      --text: #222;
+      --muted: #666;
+      --border: #dce3ec;
+    }
+
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background: var(--off-white);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      background: var(--navy);
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      padding: 8px 20px;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .topbar span { color: #7edba8; margin-right: 6px; }
+
+    /* HEADER */
+    header {
+      background: var(--white);
+      border-bottom: 2px solid var(--border);
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 36px; height: 36px;
+      background: var(--navy);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px; font-weight: 800; color: #fff;
+    }
+    .logo-text {
+      font-family: 'Nunito', sans-serif;
+      font-size: 19px; font-weight: 800; color: var(--navy);
+    }
+    .logo-text span { color: var(--teal); }
+    .header-tag {
+      font-size: 12px; color: #888; font-weight: 600;
+    }
+
+    /* CONFIRM STRIP */
+    .confirm-strip {
+      background: var(--teal);
+      padding: 13px 24px;
+      text-align: center;
+    }
+    .confirm-strip p {
+      font-size: 14px; color: var(--white); font-weight: 700;
+    }
+
+    /* MAIN LAYOUT */
+    .page-body {
+      flex: 1;
+      padding: 36px 24px 48px;
+    }
+    .page-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* HEADING */
+    .page-heading {
+      margin-bottom: 28px;
+    }
+    .page-heading h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 28px; font-weight: 800; color: var(--navy);
+      line-height: 1.2; margin-bottom: 8px;
+    }
+    .page-heading p {
+      font-size: 15px; color: var(--muted); line-height: 1.6;
+      max-width: 600px;
+    }
+
+    /* TWO COLUMN */
+    .two-col {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* LEFT — STEPS */
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .steps-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .steps-card h2 {
+      font-size: 11px; font-weight: 800; color: var(--navy);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 18px;
+    }
+    .step {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: none; padding-bottom: 0; }
+    .step-num {
+      width: 30px; height: 30px; min-width: 30px;
+      background: var(--navy); color: var(--white);
+      border-radius: 50%;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-text strong {
+      display: block; font-size: 14px; font-weight: 700;
+      color: var(--navy); margin-bottom: 3px;
+    }
+    .step-text span {
+      font-size: 13px; color: var(--muted); line-height: 1.5;
+    }
+
+    /* CONFIDENCE CARD */
+    .conf-card {
+      background: var(--navy);
+      border-radius: 10px;
+      padding: 20px 24px;
+    }
+    .conf-card p {
+      font-size: 13px; color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+    }
+    .conf-card strong { color: #7edba8; }
+
+    /* RIGHT — CALENDAR */
+    .calendar-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .calendar-card-header {
+      background: var(--navy);
+      padding: 16px 22px;
+    }
+    .calendar-card-header h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px; font-weight: 800; color: var(--white);
+      margin-bottom: 2px;
+    }
+    .calendar-card-header p {
+      font-size: 12px; color: rgba(255,255,255,0.6);
+    }
+    .calendar-card-body {
+      padding: 16px;
+    }
+    .calendar-card-body iframe {
+      width: 100%;
+      min-height: 620px;
+      border: none;
+      display: block;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy-dark);
+      padding: 20px 24px;
+      text-align: center;
+    }
+    footer p {
+      font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.7;
+    }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .two-col { grid-template-columns: 1fr; }
+      .left-col { order: 2; }
+      .calendar-card { order: 1; }
+      .page-heading h1 { font-size: 22px; }
+    }
+    @media (max-width: 480px) {
+      .page-body { padding: 24px 16px 36px; }
+      header { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <span>&#10003;</span> Confidential &nbsp;&nbsp;<span>&#10003;</span> No obligation &nbsp;&nbsp;<span>&#10003;</span> UK limited company directors only
+  </div>
+
+  <header>
+    <a href="/" class="logo">
+      <div class="logo-mark">DO</div>
+      <span class="logo-text">Director<span>Options</span></span>
+    </a>
+    <div class="header-tag">Confidential Triage Service</div>
+  </header>
+
+  <div class="confirm-strip">
+    <p>&#9989; &nbsp;Enquiry received — a member of our team will be in touch shortly.</p>
+  </div>
+
+  <div class="page-body">
+    <div class="page-inner">
+
+      <div class="page-heading">
+        <h1>Book a call with our team</h1>
+        <p>Choose a time that suits you below. The call takes around 30 minutes and is treated in strict confidence.</p>
+      </div>
+
+      <div class="two-col">
+
+        <!-- LEFT -->
+        <div class="left-col">
+          <div class="steps-card">
+            <h2>What happens next</h2>
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">
+                <strong>Pick a time</strong>
+                <span>Select any available slot from the calendar. You will receive a confirmation by email.</span>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">
+                <strong>We review your situation</strong>
+                <span>One of our team will look at what you have told us before the call so we are prepared.</span>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">
+                <strong>We outline your options</strong>
+                <span>No commitment, no pressure. We will explain what is available given your circumstances and what makes sense.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="conf-card">
+            <p>&#128274; &nbsp;Everything you share with us is <strong>strictly confidential</strong>. We do not share your details with creditors or third parties without your instruction.</p>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="calendar-card">
+          <div class="calendar-card-header">
+            <h2>Choose a time that works for you</h2>
+            <p>Available slots shown in UK time</p>
+          </div>
+          <div class="calendar-card-body">
+            <iframe
+              src="https://api.leadconnectorhq.com/widget/booking/jAZgMOgylc0sXt28T3Gz"
+              style="width:100%;border:none;overflow:hidden;min-height:620px"
+              scrolling="no"
+              id="jAZgMOgylc0sXt28T3Gz_1781122096302">
+            </iframe>
+            <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      Director Options Ltd &nbsp;|&nbsp; directoroptions.co.uk<br>
+      This service provides information and signposting only. Director Options does not provide regulated financial or legal advice.<br>
+      <a href="/privacy">Privacy Policy</a> &nbsp;|&nbsp; <a href="/terms">Terms of Use</a>
+    </p>
+  </footer>
+
+</body>
+</html>
