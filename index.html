@@ -1,6 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Cookie Consent — blocks GTM until user accepts (PECR/UK GDPR) -->
+<script>
+/* Director Options — Cookie Consent
+   Blocks GTM until user accepts. PECR/UK GDPR compliant.
+   Drop this script BEFORE the GTM snippet in <head>.
+   GTM snippet should use window.dataLayer push pattern (already does). */
+
+(function() {
+  var CONSENT_KEY = 'do_cookie_consent';
+  var CONSENT_VERSION = '1';
+
+  function getConsent() {
+    try { return localStorage.getItem(CONSENT_KEY); } catch(e) { return null; }
+  }
+
+  function setConsent(value) {
+    try { localStorage.setItem(CONSENT_KEY, value); } catch(e) {}
+  }
+
+  function loadGTM() {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-5L7ND2KJ';
+    document.head.appendChild(s);
+  }
+
+  function dismissBanner() {
+    var banner = document.getElementById('do-cookie-banner');
+    if (banner) banner.remove();
+  }
+
+  function acceptAll() {
+    setConsent('accepted_' + CONSENT_VERSION);
+    loadGTM();
+    dismissBanner();
+  }
+
+  function acceptEssential() {
+    setConsent('essential_' + CONSENT_VERSION);
+    dismissBanner();
+  }
+
+  function showBanner() {
+    var banner = document.createElement('div');
+    banner.id = 'do-cookie-banner';
+    banner.setAttribute('role', 'dialog');
+    banner.setAttribute('aria-label', 'Cookie consent');
+    banner.innerHTML = [
+      '<div id="do-cookie-inner">',
+        '<div id="do-cookie-text">',
+          '<strong>We use cookies</strong>',
+          '<p>We use analytics and advertising cookies to understand how directors find us and to measure our marketing. You can accept all cookies or essential cookies only. See our <a href="/privacy" id="do-privacy-link">Privacy Policy</a> for details.</p>',
+        '</div>',
+        '<div id="do-cookie-btns">',
+          '<button id="do-btn-essential">Essential only</button>',
+          '<button id="do-btn-accept">Accept all</button>',
+        '</div>',
+      '</div>'
+    ].join('');
+
+    var style = document.createElement('style');
+    style.textContent = [
+      '#do-cookie-banner{',
+        'position:fixed;bottom:0;left:0;right:0;z-index:99999;',
+        'background:#0f2236;border-top:3px solid #2a9d5c;',
+        'padding:16px 24px;box-shadow:0 -4px 24px rgba(0,0,0,0.35);',
+        'font-family:"Nunito Sans",sans-serif;',
+      '}',
+      '#do-cookie-inner{',
+        'max-width:1100px;margin:0 auto;display:flex;',
+        'align-items:center;gap:24px;flex-wrap:wrap;',
+      '}',
+      '#do-cookie-text{flex:1;min-width:240px;}',
+      '#do-cookie-text strong{',
+        'display:block;font-size:14px;font-weight:800;',
+        'color:#fff;margin-bottom:4px;',
+      '}',
+      '#do-cookie-text p{',
+        'font-size:12px;color:rgba(255,255,255,0.7);',
+        'line-height:1.5;margin:0;',
+      '}',
+      '#do-cookie-text a{color:#2a9d5c;text-decoration:underline;}',
+      '#do-cookie-btns{display:flex;gap:10px;flex-shrink:0;}',
+      '#do-btn-essential{',
+        'padding:10px 18px;border-radius:5px;font-size:13px;',
+        'font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,0.3);',
+        'background:transparent;color:#fff;',
+        'font-family:"Nunito Sans",sans-serif;',
+      '}',
+      '#do-btn-accept{',
+        'padding:10px 20px;border-radius:5px;font-size:13px;',
+        'font-weight:700;cursor:pointer;border:none;',
+        'background:#2a9d5c;color:#fff;',
+        'font-family:"Nunito Sans",sans-serif;',
+      '}',
+      '#do-btn-essential:hover{background:rgba(255,255,255,0.08);}',
+      '#do-btn-accept:hover{background:#238a4f;}',
+      '@media(max-width:600px){',
+        '#do-cookie-inner{flex-direction:column;align-items:flex-start;gap:14px;}',
+        '#do-cookie-btns{width:100%;}',
+        '#do-btn-essential,#do-btn-accept{flex:1;text-align:center;}',
+      '}'
+    ].join('');
+
+    document.head.appendChild(style);
+    document.body.appendChild(banner);
+
+    document.getElementById('do-btn-accept').addEventListener('click', acceptAll);
+    document.getElementById('do-btn-essential').addEventListener('click', acceptEssential);
+  }
+
+  // On load: check existing consent
+  var consent = getConsent();
+  if (consent && consent.indexOf('accepted') === 0) {
+    // Previously accepted — load GTM immediately
+    loadGTM();
+  } else if (consent && consent.indexOf('essential') === 0) {
+    // Previously declined tracking — no GTM
+  } else {
+    // No consent yet — show banner, do not load GTM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', showBanner);
+    } else {
+      showBanner();
+    }
+  }
+})();
+
+</script>
+<!-- End Cookie Consent -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Director Options | Business Options for Company Directors</title>
@@ -30,7 +162,7 @@ nav a:hover{background:#f0f5fa;color:#1a3a5c}
 .btn-header{background:#2a9d5c;color:#fff;font-size:14px;font-weight:700;padding:10px 18px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:background .15s;flex-shrink:0}
 .btn-header:hover{background:#238a4f}
 .hero{background:linear-gradient(135deg,#1a3a5c 0%,#0f2540 100%);padding:56px 20px 48px;position:relative;overflow:hidden}
-.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:start}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 520px;gap:36px;align-items:start}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(42,157,92,.15);border:1px solid rgba(42,157,92,.4);color:#7edba8;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:16px}
 .hero h1{font-family:'Nunito',sans-serif;font-size:clamp(26px,3.8vw,44px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:16px}
 .hero h1 span{color:#7edba8}
@@ -243,6 +375,10 @@ footer{background:#0f2540;color:rgba(255,255,255,.55);padding:44px 20px 26px}
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5L7ND2KJ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <div class="topbar">
   <div class="topbar-inner">
@@ -293,34 +429,25 @@ footer{background:#0f2540;color:rgba(255,255,255,.55);padding:44px 20px 26px}
     </div>
     <div class="hero-form" id="contact">
       <div id="heroFormWrap">
-        <h2 class="hf-title">Tell Us Your Situation</h2>
-        <p class="hf-sub">Confidential and without obligation.</p>
-        <form id="heroForm" novalidate>
-          <div class="hf-row">
-            <div class="hf-group"><label>First Name *</label><input type="text" name="firstname" placeholder="First name" required></div>
-            <div class="hf-group"><label>Last Name *</label><input type="text" name="lastname" placeholder="Last name" required></div>
-          </div>
-          <div class="hf-group"><label>Email Address *</label><input type="email" name="email" placeholder="your@email.com" required></div>
-          <div class="hf-group"><label>Phone <span style="font-weight:300;font-size:11px;text-transform:none;">(optional)</span></label><input type="tel" name="phone" placeholder="07700 000000"></div>
-          <div class="hf-group">
-            <label>Approximate Debt Level <span style="font-weight:300;font-size:11px;text-transform:none;">(optional)</span></label>
-            <select name="debt"><option value="" disabled selected>Select a range...</option><option>Under &pound;50,000</option><option>&pound;50,000 &ndash; &pound;150,000</option><option>&pound;150,000 &ndash; &pound;500,000</option><option>&pound;500,000 &ndash; &pound;1,000,000</option><option>Over &pound;1,000,000</option><option>Not sure / Not applicable</option></select>
-          </div>
-          <div class="hf-group"><label>Brief Description <span style="font-weight:300;font-size:11px;text-transform:none;">(optional)</span></label><textarea name="message" placeholder="Briefly describe your situation..."></textarea></div>
-          <div class="hf-consent">
-            <input type="checkbox" id="hconsent" name="consent" required>
-            <label for="hconsent">I agree to be contacted by Director Options about my enquiry. I understand that Director Options is a signposting service, that no advice will be given, and that my enquiry may be passed to a regulated third-party specialist as part of this service. I consent to being contacted by email and/or phone. I have read the <a href="#" onclick="openModal('privacy');return false;">Privacy Policy</a>.</label>
-          </div>
-          <button type="submit" class="btn-submit-main">Discuss Your Options &rarr;</button>
-          <p class="hf-privacy">&#128274; Your details are kept strictly confidential. We do not sell your personal data.</p>
-        </form>
+        <iframe
+          src="https://api.leadconnectorhq.com/widget/form/OuTGSKeKqZ0ZZmJyLwWf"
+          style="width:100%;border:none;border-radius:4px;min-height:400px"
+          id="inline-OuTGSKeKqZ0ZZmJyLwWf"
+          data-layout="{'id':'INLINE'}"
+          data-trigger-type="alwaysShow"
+          data-trigger-value=""
+          data-activation-type="alwaysActivated"
+          data-activation-value=""
+          data-deactivation-type="neverDeactivate"
+          data-deactivation-value=""
+          data-form-name="Form 8 - DO main site"
+          data-layout-iframe-id="inline-OuTGSKeKqZ0ZZmJyLwWf"
+          data-form-id="OuTGSKeKqZ0ZZmJyLwWf"
+          title="Form 8 - DO main site">
+        </iframe>
+        <script src="https://link.msgsndr.com/js/form_embed.js"></script>
       </div>
-      <div class="form-success" id="heroSuccess">
-        <div style="font-size:40px;margin-bottom:12px;">&#9989;</div>
-        <h3>Enquiry Received</h3>
-        <p>Thank you. A member of our team will review your situation and be in touch shortly. Everything you have shared is strictly confidential.</p>
       </div>
-    </div>
   </div>
 </section>
 
@@ -512,15 +639,6 @@ footer{background:#0f2540;color:rgba(255,255,255,.55);padding:44px 20px 26px}
 </footer>
 
 <script>
-document.getElementById('heroForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  const n=this.querySelector('[name="firstname"]').value.trim();
-  const em=this.querySelector('[name="email"]').value.trim();
-  const c=this.querySelector('[name="consent"]').checked;
-  if(!n||!em||!c){alert('Please complete your name, email address and tick the consent box.');return;}
-  document.getElementById('heroFormWrap').style.display='none';
-  document.getElementById('heroSuccess').classList.add('show');
-});
 document.querySelectorAll('.faq-q').forEach(btn=>{
   btn.addEventListener('click',function(){
     const a=this.nextElementSibling;
@@ -554,7 +672,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
    <button class="modal-close" onclick="closeModal('privacy')">&times;</button>
   </div>
   <div class="modal-body">
-   <div class="placeholder-note">&#9432; Placeholder document — to be reviewed by Phil (DIG) before go-live. Entity and registration details to be confirmed.</div>
+   <div class="placeholder-note">&#9432; <strong>Phil (DIG) to complete before go-live:</strong> Insert Director Options Ltd registered company number, registered office address, and confirm ICO registration number. Domain is directoroptions.com.</div>
    <h3>Who we are</h3>
    <p>Director Options Limited operates the website directoroptions.com. We are a signposting and lead generation service for company directors. We do not provide legal, financial or insolvency advice.</p>
    <h3>What data we collect</h3>
@@ -590,7 +708,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
    <button class="modal-close" onclick="closeModal('terms')">&times;</button>
   </div>
   <div class="modal-body">
-   <div class="placeholder-note">&#9432; Placeholder document — to be reviewed by Phil (DIG) before go-live.</div>
+   <div class="placeholder-note">&#9432; <strong>Phil (DIG) to complete before go-live:</strong> Insert Director Options Ltd registered company number and registered office address.</div>
    <h3>About this service</h3>
    <p>Director Options Limited operates directoroptions.com as a free signposting and lead generation service for company directors. By using this site and submitting an enquiry, you agree to these Terms of Use.</p>
    <h3>No advice given</h3>
@@ -619,7 +737,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
    <button class="modal-close" onclick="closeModal('cookies')">&times;</button>
   </div>
   <div class="modal-body">
-   <div class="placeholder-note">&#9432; Placeholder document — to be reviewed and updated once analytics and tracking stack is confirmed.</div>
+   <div class="placeholder-note">&#9432; <strong>Phil (DIG) / Monirul to complete before go-live:</strong> Confirm analytics tools in use (GA4, Meta Pixel, Google Ads). Insert Director Options Ltd registered company number and registered office address.</div>
    <h3>What are cookies?</h3>
    <p>Cookies are small text files placed on your device when you visit a website. They help the site function correctly and allow us to understand how visitors use it.</p>
    <h3>Cookies we use</h3>
@@ -646,7 +764,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
    <button class="modal-close" onclick="closeModal('complaints')">&times;</button>
   </div>
   <div class="modal-body">
-   <div class="placeholder-note">&#9432; Placeholder document — to be reviewed by Phil (DIG) before go-live.</div>
+   <div class="placeholder-note">&#9432; <strong>Phil (DIG) to complete before go-live:</strong> Insert Director Options Ltd registered company number and registered office address.</div>
    <h3>How to make a complaint</h3>
    <p>If you are unhappy with any aspect of the service provided by Director Options, we want to hear from you. Please contact us in the first instance by email at enquiries@directoroptions.com, setting out the nature of your concern.</p>
    <h3>What happens next</h3>
