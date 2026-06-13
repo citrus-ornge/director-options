@@ -1,0 +1,27 @@
+User-agent: *
+
+# Block thank-you page from indexing
+Disallow: /thank-you
+Disallow: /thank-you.html
+
+# Block landing page variants from indexing (prevent duplicate content)
+Disallow: /v1_broad.html
+Disallow: /v2_hmrc.html
+Disallow: /v3_dla.html
+Disallow: /v4_recovery.html
+Disallow: /v5_financial.html
+Disallow: /v6_wealth.html
+Disallow: /v7_wealth2.html
+
+# Block URL-path versions of landing pages
+Disallow: /broad
+Disallow: /hmrc
+Disallow: /financial
+Disallow: /recovery
+Disallow: /dla
+Disallow: /wealth
+
+# Allow main site
+Allow: /
+
+Sitemap: https://directoroptions.co.uk/sitemap.xml
