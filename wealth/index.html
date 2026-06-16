@@ -1,134 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Cookie Consent — blocks GTM until user accepts (PECR/UK GDPR) -->
+<!-- Cookie Consent v2 — Consent Mode v2, blocking overlay (PECR/UK GDPR) -->
 <script>
-/* Director Options — Cookie Consent
-   Blocks GTM until user accepts. PECR/UK GDPR compliant.
-   Drop this script BEFORE the GTM snippet in <head>.
-   GTM snippet should use window.dataLayer push pattern (already does). */
+/* Director Options — Cookie Consent v2
+   Google Consent Mode v2 compliant. Blocks all interaction until user chooses.
+   Initialises dataLayer with all storage denied before GTM loads.
+   Place BEFORE GTM snippet in <head>. */
 
-(function() {
+(function () {
   var CONSENT_KEY = 'do_cookie_consent';
   var CONSENT_VERSION = '1';
 
+  // --- Step 1: Initialise dataLayer and set ALL storage to denied by default ---
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'granted',
+    'security_storage': 'granted',
+    'wait_for_update': 2000
+  });
+
+  // Push consent_default event so GTM can listen
+  dataLayer.push({ event: 'consent_default' });
+
   function getConsent() {
-    try { return localStorage.getItem(CONSENT_KEY); } catch(e) { return null; }
+    try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
   }
 
   function setConsent(value) {
-    try { localStorage.setItem(CONSENT_KEY, value); } catch(e) {}
+    try { localStorage.setItem(CONSENT_KEY, value); } catch (e) { }
   }
 
   function loadGTM() {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+    if (document.getElementById('gtm-script')) return;
     var s = document.createElement('script');
+    s.id = 'gtm-script';
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-5L7ND2KJ';
+    dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
     document.head.appendChild(s);
   }
 
-  function dismissBanner() {
-    var banner = document.getElementById('do-cookie-banner');
-    if (banner) banner.remove();
+  function grantAll() {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted',
+      'functionality_storage': 'granted',
+      'security_storage': 'granted'
+    });
+    dataLayer.push({ event: 'consent_update', consent_action: 'accepted_all' });
+    loadGTM();
+  }
+
+  function grantEssential() {
+    gtag('consent', 'update', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'functionality_storage': 'granted',
+      'security_storage': 'granted'
+    });
+    dataLayer.push({ event: 'consent_update', consent_action: 'essential_only' });
+  }
+
+  function removeOverlay() {
+    var overlay = document.getElementById('do-consent-overlay');
+    if (overlay) overlay.remove();
+    // Re-enable scrolling
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
   }
 
   function acceptAll() {
     setConsent('accepted_' + CONSENT_VERSION);
-    loadGTM();
-    dismissBanner();
+    grantAll();
+    removeOverlay();
   }
 
-  function acceptEssential() {
+  function essentialOnly() {
     setConsent('essential_' + CONSENT_VERSION);
-    dismissBanner();
+    grantEssential();
+    removeOverlay();
   }
 
   function showBanner() {
-    var banner = document.createElement('div');
-    banner.id = 'do-cookie-banner';
-    banner.setAttribute('role', 'dialog');
-    banner.setAttribute('aria-label', 'Cookie consent');
-    banner.innerHTML = [
-      '<div id="do-cookie-inner">',
-        '<div id="do-cookie-text">',
-          '<strong>We use cookies</strong>',
-          '<p>We use analytics and advertising cookies to understand how directors find us and to measure our marketing. You can accept all cookies or essential cookies only. See our <a href="/privacy" id="do-privacy-link">Privacy Policy</a> for details.</p>',
-        '</div>',
-        '<div id="do-cookie-btns">',
+    // Lock body scroll
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+
+    var overlay = document.createElement('div');
+    overlay.id = 'do-consent-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Cookie consent');
+
+    overlay.innerHTML = [
+      '<div id="do-consent-box">',
+        '<div id="do-consent-logo">Director<span>Options</span></div>',
+        '<h2 id="do-consent-title">Before you continue</h2>',
+        '<p id="do-consent-body">We use cookies and tracking technologies to understand how directors find us and to measure our marketing effectiveness. You can choose to accept all cookies or essential cookies only.</p>',
+        '<p id="do-consent-body2">We use Meta Pixel, Google Analytics (GA4) and Google Ads for analytics and advertising. These will only activate with your consent. See our <a href="#" onclick="openModal && openModal(\'privacy\');return false;">Privacy Policy</a> for full details.</p>',
+        '<div id="do-consent-btns">',
           '<button id="do-btn-essential">Essential only</button>',
-          '<button id="do-btn-accept">Accept all</button>',
+          '<button id="do-btn-accept">Accept all cookies</button>',
         '</div>',
+        '<p id="do-consent-note">You can change your preferences at any time by clearing your browser cookies.</p>',
       '</div>'
     ].join('');
 
     var style = document.createElement('style');
     style.textContent = [
-      '#do-cookie-banner{',
-        'position:fixed;bottom:0;left:0;right:0;z-index:99999;',
-        'background:#0f2236;border-top:3px solid #2a9d5c;',
-        'padding:16px 24px;box-shadow:0 -4px 24px rgba(0,0,0,0.35);',
+      '#do-consent-overlay{',
+        'position:fixed;inset:0;z-index:999999;',
+        'background:rgba(10,22,40,0.92);',
+        'display:flex;align-items:center;justify-content:center;',
+        'padding:20px;',
         'font-family:"Nunito Sans",sans-serif;',
       '}',
-      '#do-cookie-inner{',
-        'max-width:1100px;margin:0 auto;display:flex;',
-        'align-items:center;gap:24px;flex-wrap:wrap;',
+      '#do-consent-box{',
+        'background:#fff;border-radius:12px;',
+        'padding:36px 32px;max-width:520px;width:100%;',
+        'box-shadow:0 24px 64px rgba(0,0,0,0.4);',
+        'text-align:center;',
       '}',
-      '#do-cookie-text{flex:1;min-width:240px;}',
-      '#do-cookie-text strong{',
-        'display:block;font-size:14px;font-weight:800;',
-        'color:#fff;margin-bottom:4px;',
+      '#do-consent-logo{',
+        'font-family:"Nunito",sans-serif;font-size:18px;font-weight:800;',
+        'color:#1a3a5c;letter-spacing:0.04em;text-transform:uppercase;',
+        'margin-bottom:20px;',
       '}',
-      '#do-cookie-text p{',
-        'font-size:12px;color:rgba(255,255,255,0.7);',
-        'line-height:1.5;margin:0;',
+      '#do-consent-logo span{color:#2a9d5c;}',
+      '#do-consent-title{',
+        'font-family:"Nunito",sans-serif;font-size:20px;font-weight:800;',
+        'color:#1a3a5c;margin-bottom:12px;',
       '}',
-      '#do-cookie-text a{color:#2a9d5c;text-decoration:underline;}',
-      '#do-cookie-btns{display:flex;gap:10px;flex-shrink:0;}',
+      '#do-consent-body,#do-consent-body2{',
+        'font-size:13px;color:#555;line-height:1.6;margin-bottom:10px;',
+      '}',
+      '#do-consent-body2 a{color:#1a3a5c;text-decoration:underline;}',
+      '#do-consent-btns{',
+        'display:flex;gap:12px;margin:24px 0 16px;',
+        'flex-direction:column;',
+      '}',
       '#do-btn-essential{',
-        'padding:10px 18px;border-radius:5px;font-size:13px;',
-        'font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,0.3);',
-        'background:transparent;color:#fff;',
+        'padding:13px 20px;border-radius:6px;font-size:14px;',
+        'font-weight:700;cursor:pointer;',
+        'border:2px solid #1a3a5c;background:#fff;color:#1a3a5c;',
         'font-family:"Nunito Sans",sans-serif;',
+        'transition:background 0.15s;',
       '}',
       '#do-btn-accept{',
-        'padding:10px 20px;border-radius:5px;font-size:13px;',
+        'padding:13px 20px;border-radius:6px;font-size:14px;',
         'font-weight:700;cursor:pointer;border:none;',
         'background:#2a9d5c;color:#fff;',
         'font-family:"Nunito Sans",sans-serif;',
+        'transition:background 0.15s;',
       '}',
-      '#do-btn-essential:hover{background:rgba(255,255,255,0.08);}',
+      '#do-btn-essential:hover{background:#f0f4f8;}',
       '#do-btn-accept:hover{background:#238a4f;}',
-      '@media(max-width:600px){',
-        '#do-cookie-inner{flex-direction:column;align-items:flex-start;gap:14px;}',
-        '#do-cookie-btns{width:100%;}',
-        '#do-btn-essential,#do-btn-accept{flex:1;text-align:center;}',
+      '#do-consent-note{',
+        'font-size:11px;color:#aaa;line-height:1.5;margin:0;',
+      '}',
+      '@media(max-width:480px){',
+        '#do-consent-box{padding:28px 20px;}',
+        '#do-consent-title{font-size:18px;}',
       '}'
     ].join('');
 
     document.head.appendChild(style);
-    document.body.appendChild(banner);
+    document.body.appendChild(overlay);
 
     document.getElementById('do-btn-accept').addEventListener('click', acceptAll);
-    document.getElementById('do-btn-essential').addEventListener('click', acceptEssential);
+    document.getElementById('do-btn-essential').addEventListener('click', essentialOnly);
   }
 
-  // On load: check existing consent
+  // --- Step 2: Check existing consent on load ---
   var consent = getConsent();
+
   if (consent && consent.indexOf('accepted') === 0) {
-    // Previously accepted — load GTM immediately
-    loadGTM();
+    // Previously accepted — grant all and load GTM immediately
+    grantAll();
   } else if (consent && consent.indexOf('essential') === 0) {
-    // Previously declined tracking — no GTM
+    // Previously declined tracking — essential only, no GTM
+    grantEssential();
   } else {
-    // No consent yet — show banner, do not load GTM
+    // No consent yet — show blocking overlay
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', showBanner);
     } else {
       showBanner();
     }
   }
+
 })();
 
 </script>
@@ -176,7 +249,7 @@ nav a:hover{background:#f0f5fa;color:#1a3a5c}
 .hero-stat strong{display:block;font-family:'Nunito',sans-serif;font-size:24px;font-weight:800;color:#fff;line-height:1;margin-bottom:2px}
 .hero-stat span{font-size:12px;color:rgba(255,255,255,.5)}
 .hero-stats-line{font-size:15px;font-weight:600;color:rgba(255,255,255,.65);margin-top:18px;letter-spacing:0.01em;}
-.hero-form{background:#fff;border-radius:8px;padding:16px 20px;box-shadow:0 16px 56px rgba(0,0,0,.28);max-height:calc(100vh - 120px);overflow-y:auto}
+.hero-form{background:#fff;border-radius:8px;padding:16px 20px;box-shadow:0 16px 56px rgba(0,0,0,.28);max-height:calc(100vh - 120px);overflow-y:auto;scroll-margin-top:80px;border:none;outline:none}
 .hf-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:#1a3a5c;margin-bottom:4px}
 .hf-sub{font-size:13px;color:#888;margin-bottom:18px;line-height:1.45}
 .hf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -405,7 +478,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="phone-label">Confidential consultation</span>
       <a href="tel:03300000000" class="phone-num">0330 000 0000</a>
     </div>
-    <a href="#contact" class="btn-header">Discuss Your Options &rarr;</a>
+    <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="btn-header">Discuss Your Options &rarr;</a>
   </div>
 </header>
 
@@ -416,7 +489,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h1>There May Be Structured Approaches to<br><span>Director Loan and Wealth Planning.</span></h1>
       <p class="hero-sub">Some directors explore structured approaches to introducing or extracting funds from their company, including approaches involving director loans, investments and wider business ownership considerations. Understand the concepts, key considerations and potential next steps before making decisions.</p>
       <div class="hero-actions">
-        <a href="#contact" class="btn-green">Discuss Your Options &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="btn-green">Discuss Your Options &rarr;</a>
         <a href="tel:03300000000" class="btn-outline-w">&#128222; Call 0330 000 0000</a>
       </div>
       <div class="hero-stats">
@@ -472,49 +545,49 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
         <h3 class="svc-title">Business Restructuring</h3>
         <p class="svc-body">HMRC or creditor debts mounting but still trading? There are structured routes - CVAs, informal arrangements, operational turnarounds - that don't automatically mean closure.</p>
-        <a href="#contact" class="svc-link">Understand your options &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="svc-link">Understand your options &rarr;</a>
       </div>
       <div class="service-card">
         <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
         <h3 class="svc-title">Director's Loan Repair</h3>
         <p class="svc-body">An overdrawn director's loan can create personal liability. There are structured ways to resolve this that most directors are unaware of.</p>
-        <a href="#contact" class="svc-link">Find out what's available &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="svc-link">Find out what's available &rarr;</a>
       </div>
       <div class="service-card">
         <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg></div>
         <h3 class="svc-title">Tax-Efficient Planning</h3>
         <p class="svc-body">Profitable business but an inefficient tax position? Whether you're planning an exit or want to extract value, there are structured routes that exist for exactly this situation.</p>
-        <a href="#contact" class="svc-link">Explore your options &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="svc-link">Explore your options &rarr;</a>
       </div>
       <div class="service-card">
         <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
         <h3 class="svc-title">Formal Insolvency</h3>
         <p class="svc-body">When closure is the right outcome, it should be handled correctly, protecting directors from personal liability. CVL, MVL and Administration are handled ethically by specialist practitioners.</p>
-        <a href="#contact" class="svc-link">Understand the process &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="svc-link">Understand the process &rarr;</a>
       </div>
       <div class="service-card">
         <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
         <h3 class="svc-title">Business Continuity Structure</h3>
         <p class="svc-body">In some circumstances, a new company structure may allow a viable business to continue while prior liabilities are addressed through a formal, regulated process. This is not appropriate in all situations, is subject to strict legal requirements, and directors should seek specialist regulated advice before considering this route.</p>
-        <a href="#contact" class="svc-link">Get in touch to discuss &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="svc-link">Get in touch to discuss &rarr;</a>
       </div>
       <div class="service-card">
         <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
         <h3 class="svc-title">Director Loan &amp; Wealth Extraction</h3>
         <p class="svc-body">Some directors explore structured approaches to introducing or extracting funds from their company, including investment and director loan structures as part of wider business and wealth planning considerations. Understand the concepts, key considerations, and potential next steps before making decisions.</p>
-        <a href="#contact" class="svc-link">Explore your options &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="svc-link">Explore your options &rarr;</a>
       </div>
       <div class="service-card">
         <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="18" x2="12" y2="16"/></svg></div>
         <h3 class="svc-title">R&amp;D Tax Credit Funding</h3>
         <p class="svc-body">If your company has a pending R&amp;D tax credit claim with HMRC, that receivable may be used to access working capital now - before HMRC pays out. This can release significant cash tied up in an approved claim, without taking on conventional debt.</p>
-        <a href="#contact" class="svc-link">Find out if you qualify &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="svc-link">Find out if you qualify &rarr;</a>
       </div>
       <div class="service-card">
         <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
         <h3 class="svc-title">Government-Backed Loan Recovery</h3>
         <p class="svc-body">Not every distressed business needs to close. Where viable, government-guaranteed loan facilities of up to &pound;1 million - with 70% government backing - may allow a business to stabilise, restructure and recover rather than proceed to formal insolvency.</p>
-        <a href="#contact" class="svc-link">Discuss your options &rarr;</a>
+        <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="svc-link">Discuss your options &rarr;</a>
       </div>
     </div>
   </div>
@@ -555,7 +628,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="cta-band">
   <p>The earlier a director understands their options, <strong>the more of those options remain open.</strong> The earlier a director seeks to understand their position, the more routes tend to remain open.</p>
-  <a href="#contact" class="btn-green-lg">Discuss Your Options &rarr;</a>
+  <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="btn-green-lg">Discuss Your Options &rarr;</a>
 </div>
 
 <section class="signals">
@@ -660,7 +733,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 <!-- MOBILE STICKY CALL BAR -->
 <div class="mobile-call-bar">
   <a href="tel:03300000000" class="mcb-phone">&#128222; 0330 000 0000</a>
-  <a href="#contact" class="mcb-cta">Discuss Your Options &rarr;</a>
+  <a href="#contact" onclick="event.preventDefault();var el=document.getElementById('contact');el.scrollIntoView({behavior:'smooth',block:'start'});el.scrollTop=0;" class="mcb-cta">Discuss Your Options &rarr;</a>
 </div>
 <!-- MODALS -->
 <div class="modal-overlay" id="modal-privacy" onclick="closeModalOverlay(event,'privacy')">
