@@ -1,6 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Consent State Carry-Through — reads localStorage, pushes dataLayer, no banner -->
+<script>
+/* Director Options — Consent State Carry-Through
+   Reads consent decision from localStorage (set on landing page).
+   Pushes correct consent default + update to dataLayer.
+   No banner shown — user already consented on landing page. */
+
+(function () {
+  var CONSENT_KEY = 'do_cookie_consent';
+
+  // Step 1: Initialise dataLayer and set all storage denied by default
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'granted',
+    'security_storage': 'granted',
+    'wait_for_update': 500
+  });
+
+  dataLayer.push({ event: 'consent_default' });
+
+  // Step 2: Read consent decision from localStorage and update accordingly
+  var consent;
+  try { consent = localStorage.getItem(CONSENT_KEY); } catch (e) { consent = null; }
+
+  if (consent && consent.indexOf('accepted') === 0) {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted',
+      'functionality_storage': 'granted',
+      'security_storage': 'granted'
+    });
+    dataLayer.push({ event: 'consent_update', consent_action: 'accepted_all' });
+  } else if (consent && consent.indexOf('essential') === 0) {
+    gtag('consent', 'update', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'functionality_storage': 'granted',
+      'security_storage': 'granted'
+    });
+    dataLayer.push({ event: 'consent_update', consent_action: 'essential_only' });
+  }
+  // If no consent found (direct navigation) - default denied state remains, no banner
+})();
+</script>
+
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
