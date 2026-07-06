@@ -565,6 +565,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           title="Form 1 - Broad">
         </iframe>
         <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+        <script>
+        // Force iframe to stay wide enough for GHL two-column layout
+        // form_embed.js resizes the iframe after load - we override it
+        (function() {
+          var attempts = 0;
+          var interval = setInterval(function() {
+            var iframe = document.getElementById('inline-vT6VrFf4hRGUPE80SJJV');
+            if (iframe) {
+              iframe.style.setProperty('width', '100%', 'important');
+              iframe.style.setProperty('min-width', '600px', 'important');
+              attempts++;
+              if (attempts > 20) clearInterval(interval);
+            }
+          }, 200);
+        })();
+        </script>
       </div>
     </div>
   </div>
