@@ -50,16 +50,6 @@
     document.head.appendChild(s);
   }
 
-  function loadChatWidget() {
-    if (document.getElementById('chat-widget-loader')) return;
-    var s = document.createElement('script');
-    s.id = 'chat-widget-loader';
-    s.src = 'https://widgets.leadconnectorhq.com/loader.js';
-    s.setAttribute('data-resources-url', 'https://widgets.leadconnectorhq.com/chat-widget/loader.js');
-    s.setAttribute('data-widget-id', '6a3bd89123af83a13cd66f53');
-    document.body.appendChild(s);
-  }
-
   function grantAll() {
     gtag('consent', 'update', {
       'ad_storage': 'granted',
@@ -72,7 +62,6 @@
     });
     dataLayer.push({ event: 'consent_update', consent_action: 'accepted_all' });
     loadGTM();
-    loadChatWidget();
   }
 
   function grantEssential() {
@@ -292,7 +281,7 @@ nav a:hover{background:#f0f5fa;color:#1a3a5c}
 .btn-header{background:#2a9d5c;color:#fff;font-size:14px;font-weight:700;padding:10px 18px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:background .15s;flex-shrink:0}
 .btn-header:hover{background:#238a4f}
 .hero{background:linear-gradient(135deg,#1a3a5c 0%,#0f2540 100%);padding:56px 20px 48px;position:relative;overflow:hidden}
-.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:48px;align-items:start}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 680px;gap:32px;align-items:start}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(42,157,92,.15);border:1px solid rgba(42,157,92,.4);color:#7edba8;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:16px}
 .hero h1{font-family:'Nunito',sans-serif;font-size:clamp(26px,3.8vw,44px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:16px}
 .hero h1 span{color:#7edba8}
@@ -306,7 +295,7 @@ nav a:hover{background:#f0f5fa;color:#1a3a5c}
 .hero-stat strong{display:block;font-family:'Nunito',sans-serif;font-size:24px;font-weight:800;color:#fff;line-height:1;margin-bottom:2px}
 .hero-stat span{font-size:12px;color:rgba(255,255,255,.5)}
 .hero-stats-line{font-size:15px;font-weight:600;color:rgba(255,255,255,.65);margin-top:18px;letter-spacing:0.01em;}
-.hero-form{background:#fff;border-radius:8px;padding:30px 26px;box-shadow:0 16px 56px rgba(0,0,0,.28)}
+.hero-form{background:#fff;border-radius:8px;padding:0;box-shadow:0 16px 56px rgba(0,0,0,.28);overflow:hidden}
 .hf-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:#1a3a5c;margin-bottom:4px}
 .hf-sub{font-size:13px;color:#888;margin-bottom:18px;line-height:1.45}
 .hf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -434,7 +423,7 @@ footer{background:#0f2540;color:rgba(255,255,255,.55);padding:44px 20px 26px}
   .hero-stat strong{font-size:20px}
   .hero-stat span{font-size:11px}
   .hero-stats-line{font-size:14px;margin-top:14px}
-  .hero-form{padding:24px 18px}
+  .hero-form{padding:10px 12px}
   .hf-row{grid-template-columns:1fr}
   .hf-title{font-size:17px}
 
@@ -482,7 +471,6 @@ footer{background:#0f2540;color:rgba(255,255,255,.55);padding:44px 20px 26px}
   .mobile-call-bar{display:flex}
   body{padding-bottom:70px}
 }
-
 /* ── MODALS ──────────────────────────────── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
@@ -544,8 +532,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="hero-inner">
     <div>
       <div class="hero-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg> No Obligation</div>
-      <h1>Is Your Company Struggling<br>with Debt? <span>You Have More<br>Options Than You Think</span></h1>
-      <p class="hero-sub">Director Options helps company directors explore the options, pathways and specialist services that may be relevant to their circumstances. We review your enquiry and facilitate introductions to specialist firms where appropriate. No obligation, no jargon and no pressure. The options available will depend on your individual circumstances, and not every situation will have a straightforward outcome.</p>
+      <h1>Your Business May Have More<br><span>Options Than You Think</span></h1>
+      <p class="hero-sub">Business pressure does not always lead to the same outcome. Some directors explore recovery, restructuring, refinancing or closure pathways depending on their circumstances. Understanding the available options is often an important first step. No obligation, no jargon and no pressure, just options.</p>
       <div class="hero-actions">
         <a href="#contact" class="btn-green">Discuss Your Options &rarr;</a>
         <a href="tel:02045364256" class="btn-outline-w">&#128222; Call 020 4536 4256</a>
@@ -560,9 +548,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="hero-form" id="contact">
       <div id="heroFormWrap">
         <iframe
-          src="https://api.leadconnectorhq.com/widget/form/OuTGSKeKqZ0ZZmJyLwWf"
-          style="width:100%;border:none;border-radius:4px;min-height:400px"
-          id="inline-OuTGSKeKqZ0ZZmJyLwWf"
+          src="https://api.leadconnectorhq.com/widget/form/vT6VrFf4hRGUPE80SJJV"
+          style="width:100%;height:100%;border:none;border-radius:8px"
+          id="inline-vT6VrFf4hRGUPE80SJJV"
           data-layout="{'id':'INLINE'}"
           data-trigger-type="alwaysShow"
           data-trigger-value=""
@@ -570,14 +558,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           data-activation-value=""
           data-deactivation-type="neverDeactivate"
           data-deactivation-value=""
-          data-form-name="Form 8 - DO main site"
-          data-layout-iframe-id="inline-OuTGSKeKqZ0ZZmJyLwWf"
-          data-form-id="OuTGSKeKqZ0ZZmJyLwWf"
-          title="Form 8 - DO main site">
+          data-form-name="Form 1 - Broad"
+          data-height="1177"
+          data-layout-iframe-id="inline-vT6VrFf4hRGUPE80SJJV"
+          data-form-id="vT6VrFf4hRGUPE80SJJV"
+          title="Form 1 - Broad">
         </iframe>
         <script src="https://link.msgsndr.com/js/form_embed.js"></script>
       </div>
-      </div>
+    </div>
   </div>
 </section>
 
@@ -769,6 +758,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script>
+var heroFormEl=document.getElementById('heroForm');
+if(heroFormEl){
+  document.getElementById('heroForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const n=this.querySelector('[name="firstname"]').value.trim();
+  const em=this.querySelector('[name="email"]').value.trim();
+  const c=this.querySelector('[name="consent"]').checked;
+  if(!n||!em||!c){alert('Please complete your name, email address and tick the consent box.');return;}
+  document.getElementById('heroFormWrap').style.display='none';
+  document.getElementById('heroSuccess').classList.add('show');
+  var bs=document.getElementById('booking-section');if(bs)bs.style.display='block';
+});
+}
 document.querySelectorAll('.faq-q').forEach(btn=>{
   btn.addEventListener('click',function(){
     const a=this.nextElementSibling;
@@ -793,7 +795,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   <a href="tel:02045364256" class="mcb-phone">&#128222; 020 4536 4256</a>
   <a href="#contact" class="mcb-cta">Discuss Your Options &rarr;</a>
 </div>
-
 <!-- MODALS -->
 <div class="modal-overlay" id="modal-privacy" onclick="closeModalOverlay(event,'privacy')">
  <div class="modal-box">
