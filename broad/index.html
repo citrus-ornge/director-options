@@ -281,7 +281,7 @@ nav a:hover{background:#f0f5fa;color:#1a3a5c}
 .btn-header{background:#2a9d5c;color:#fff;font-size:14px;font-weight:700;padding:10px 18px;border-radius:5px;text-decoration:none;white-space:nowrap;transition:background .15s;flex-shrink:0}
 .btn-header:hover{background:#238a4f}
 .hero{background:linear-gradient(135deg,#1a3a5c 0%,#0f2540 100%);padding:56px 20px 48px;position:relative;overflow:hidden}
-.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr minmax(0,600px);gap:32px;align-items:start}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 580px;gap:32px;align-items:start}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(42,157,92,.15);border:1px solid rgba(42,157,92,.4);color:#7edba8;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:16px}
 .hero h1{font-family:'Nunito',sans-serif;font-size:clamp(26px,3.8vw,44px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:16px}
 .hero h1 span{color:#7edba8}
@@ -296,8 +296,8 @@ nav a:hover{background:#f0f5fa;color:#1a3a5c}
 .hero-stat span{font-size:12px;color:rgba(255,255,255,.5)}
 .hero-stats-line{font-size:15px;font-weight:600;color:rgba(255,255,255,.65);margin-top:18px;letter-spacing:0.01em;}
 .hero-form{background:#fff;border-radius:8px;padding:0;box-shadow:0 16px 56px rgba(0,0,0,.28);overflow:hidden}
-#heroFormWrap{width:100%;min-width:0;overflow:hidden}
-#heroFormWrap iframe{width:100%!important;min-width:600px!important;max-width:100%!important;border:none!important;display:block!important}
+#heroFormWrap{width:100%;overflow:hidden}
+#heroFormWrap iframe{width:100%!important;border:none!important;display:block!important}
 #contact{scroll-margin-top:80px;scroll-margin-bottom:90px}
 .hf-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:#1a3a5c;margin-bottom:4px}
 .hf-sub{font-size:13px;color:#888;margin-bottom:18px;line-height:1.45}
@@ -556,7 +556,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div id="heroFormWrap">
         <iframe
           src="https://api.leadconnectorhq.com/widget/form/vT6VrFf4hRGUPE80SJJV"
-          style="width:100%;border:none;border-radius:8px;display:block;max-width:100%"
+          style="width:100%;height:100%;border:none;border-radius:8px"
           id="inline-vT6VrFf4hRGUPE80SJJV"
           data-layout="{'id':'INLINE'}"
           data-trigger-type="alwaysShow"
@@ -572,30 +572,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           title="Form 1 - Broad">
         </iframe>
         <script src="https://link.msgsndr.com/js/form_embed.js"></script>
-        <script>
-        (function() {
-          function tuneFormIframe() {
-            var iframe = document.querySelector('#heroFormWrap iframe');
-            if (!iframe) return;
-            var isDesktop = window.matchMedia('(min-width: 961px)').matches;
-            iframe.style.setProperty('width', '100%', 'important');
-            iframe.style.setProperty('border', 'none', 'important');
-            iframe.style.setProperty('max-width', '100%', 'important');
-            if (isDesktop) {
-              iframe.style.setProperty('min-width', '600px', 'important');
-            } else {
-              iframe.style.setProperty('min-width', '0', 'important');
-            }
-          }
-          var attempts = 0;
-          var interval = setInterval(function() {
-            tuneFormIframe();
-            attempts++;
-            if (attempts > 20) clearInterval(interval);
-          }, 200);
-          window.addEventListener('resize', tuneFormIframe);
-        })();
-        </script>
       </div>
     </div>
   </div>
@@ -789,19 +765,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script>
-var heroFormEl=document.getElementById('heroForm');
-if(heroFormEl){
-  document.getElementById('heroForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  const n=this.querySelector('[name="firstname"]').value.trim();
-  const em=this.querySelector('[name="email"]').value.trim();
-  const c=this.querySelector('[name="consent"]').checked;
-  if(!n||!em||!c){alert('Please complete your name, email address and tick the consent box.');return;}
-  document.getElementById('heroFormWrap').style.display='none';
-  document.getElementById('heroSuccess').classList.add('show');
-  var bs=document.getElementById('booking-section');if(bs)bs.style.display='block';
-});
-}
 document.querySelectorAll('.faq-q').forEach(btn=>{
   btn.addEventListener('click',function(){
     const a=this.nextElementSibling;
